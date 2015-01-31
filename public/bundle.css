@@ -643,7 +643,7 @@ ul {
   list-style: none;
 }
 ul li:before {
-  content: '- ';
+  content: '-- ';
 }
 .app {
   display: flex;
