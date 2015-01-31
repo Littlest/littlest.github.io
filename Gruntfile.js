@@ -3,9 +3,10 @@
 // Transparently allow require-ing `component.jsx`.
 require('node-jsx').install({ extension: '.jsx' });
 
-var fs = require('fs')
-  , path = require('path')
-  , littlest = require('littlest-isomorph');
+var fs = require('fs');
+var path = require('path');
+var littlest = require('littlest-isomorph');
+var vm = require('vm');
 
 var dependencies = [
   'littlest-isomorph',
@@ -60,7 +61,7 @@ module.exports = function (grunt) {
       },
       shared: {
         files: ['lib/**/*.js', 'lib/**/*.jsx', 'lib/**/*.json'],
-        tasks: ['browserify:app', 'index']
+        tasks: ['browserify:app', 'grunt:index']
       },
       dependencies: {
         files: ['package.json'],
@@ -68,7 +69,7 @@ module.exports = function (grunt) {
       },
       index: {
         files: ['_index.html'],
-        tasks: ['index']
+        tasks: ['grunt:index']
       },
       styles: {
         files: ['styles/**/*.less'],
@@ -76,6 +77,9 @@ module.exports = function (grunt) {
         options: {
           atBegin: true
         }
+      },
+      options: {
+        spawn: false
       }
     }
   });
@@ -83,6 +87,16 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
+
+  grunt.registerTask('grunt', function (command) {
+    grunt.util.spawn({
+      cmd: 'grunt',
+      args: [command],
+      opts: {
+        stdio: 'inherit'
+      }
+    }, this.async());
+  });
 
   grunt.registerTask('index', function () {
     var context = require('./lib/context');

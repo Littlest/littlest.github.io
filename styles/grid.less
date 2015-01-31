@@ -1,0 +1,42 @@
+.container {
+  .clearfix();
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 16px;
+
+  &--readability {
+    max-width: 720px;
+  }
+}
+
+.row {
+  .clearfix();
+  margin: 0 -16px;
+
+  &__col {
+    display: inline-block;
+    padding: 0 16px;
+    position: relative;
+    width: 100%;
+
+    .generate-column-rules(12, width);
+    .generate-column-rules(12, left, push-);
+    .generate-column-rules(12, right, pull-);
+
+    @media (max-width: 800px) {
+      &--md {
+        display: block;
+        left: 0;
+        right: 0;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.generate-column-rules(@count, @rule, @prefix: ~'', @index: 1) when (@index =< @count) {
+  &--@{prefix}@{index} {
+    @{rule}: (@index * 100% / @count);
+  }
+  .generate-column-rules(@count, @rule, @prefix, (@index + 1));
+}

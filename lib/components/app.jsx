@@ -7,20 +7,22 @@ var App = React.createClass({
     return (
       <div className="app">
         <div className="app__header">
-          <h1><a href={this.context.getRouteUrl('home')}>Littlest</a></h1>
-          <nav>
-            <ul className="nav-list">
-              <li><a className="nav-list__item" href={this.context.getRouteUrl('home')}>Home</a></li>
-              <li><a className="nav-list__item" href={this.context.getRouteUrl('about')}>About</a></li>
-            </ul>
-          </nav>
+          <div className="container">
+            <h1 className="app__title"><a href={this.context.getRouteUrl('home')}>Littlest</a></h1>
+            <img className="app__logo" src="public/logo.png" />
+          </div>
         </div>
         <div className="app__content">
-          {this.props.children}
+          <div className="container container--readability">
+            {this.props.children}
+          </div>
         </div>
-        <div class="app__footer">
-          Made with &hearts; by <a href="https://twitter.com/Schoonology">@Schoonology</a>. Incubated <a href="https://faithlife.com">@Faithlife</a>.
-          Code (including this site) is available under <a href="https://github.com/Littlest/littlest.github.io/blob/master/LICENSE">MIT</a>. Documentation is available under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
+        <div className="app__footer">
+          <div className="container">
+            <p>Made with &hearts; by <a href="https://twitter.com/Schoonology">@Schoonology</a>.</p>
+            <p>Incubated <a href="https://faithlife.com">@Faithlife</a>.</p>
+            <p>Code (including this site) is available under <a href="https://github.com/Littlest/littlest.github.io/blob/master/LICENSE">MIT</a>. Documentation is available under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+          </div>
         </div>
       </div>
     );
