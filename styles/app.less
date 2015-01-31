@@ -22,32 +22,7 @@ a:hover {
 }
 
 .app {
-  height: 100%;
-  position: relative;
-
-  &__sidebar {
-    background: @sidebar-bg-color;
-    bottom: 0;
-    color: @sidebar-fg-color;
-    left: 0;
-    padding: 16px;
-    position: absolute;
-    top: 0;
-    width: 240px;
-  }
-
-  &__content {
-    background: @content-bg-color;
-    bottom: 0;
-    color: @content-fg-color;
-    height: 100%;
-    left: 240px;
-    overflow-y: scroll;
-    padding: 16px;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
+  .sticky();
 }
 
 .nav-list {

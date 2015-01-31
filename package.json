@@ -3,12 +3,6 @@
   "version": "1.0.0",
   "description": "The website for the Littlest family of JavaScript libraries.",
   "main": "index.js",
-  "scripts": {
-    "start": "node bin/cluster >> logs 2>&1 &",
-    "stop": "cat data/cluster.pid | xargs -n 1 kill",
-    "test": "curl localhost:8080/up",
-    "logs": "touch logs && tail -F logs"
-  },
   "dependencies": {
     "express": "~4.9.3",
     "littlest-isomorph": "~0.10.0",

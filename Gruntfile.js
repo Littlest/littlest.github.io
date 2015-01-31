@@ -1,6 +1,11 @@
 'use strict';
 
-var path = require('path');
+// Transparently allow require-ing `component.jsx`.
+require('node-jsx').install({ extension: '.jsx' });
+
+var fs = require('fs')
+  , path = require('path')
+  , littlest = require('littlest-isomorph');
 
 var dependencies = [
   'littlest-isomorph',
@@ -54,19 +59,16 @@ module.exports = function (grunt) {
         }
       },
       shared: {
-        files: ['data/**/*.json', 'lib/**/*.js', 'lib/**/*.jsx', 'lib/**/*.json'],
-        tasks: ['browserify:app', 'server']
-      },
-      server: {
-        files: ['bin/server', 'bin/cluster', 'public/index.html'],
-        tasks: ['server'],
-        options: {
-          atBegin: true
-        }
+        files: ['lib/**/*.js', 'lib/**/*.jsx', 'lib/**/*.json'],
+        tasks: ['browserify:app', 'index']
       },
       dependencies: {
         files: ['package.json'],
-        tasks: ['browserify:dependencies', 'server']
+        tasks: ['browserify:dependencies']
+      },
+      index: {
+        files: ['_index.html'],
+        tasks: ['index']
       },
       styles: {
         files: ['styles/**/*.less'],
@@ -85,42 +87,20 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('npm', function (command, arg) {
-    grunt.util.spawn({
-      cmd: 'npm',
-      args: [command].concat(arg || []),
-      opts: {
-        stdio: 'inherit'
-      }
-    }, this.async());
+  grunt.registerTask('index', function () {
+    var context = require('./lib/context');
+    var renderer = littlest.StaticRenderer.createRenderer({
+      templatePath: path.resolve(__dirname, '_index.html')
+    });
+
+    require.cache = {};
+
+    fs.writeFileSync(
+      path.resolve(__dirname, 'index.html'),
+      renderer.render(context.router.getRoute('/'), context)
+    );
   });
 
-  grunt.registerTask('docker', function () {
-    grunt.util.spawn({
-      cmd: 'docker',
-      args: ['build', '-t', 'littlest-github-io', '.'],
-      opts: {
-        stdio: 'inherit'
-      }
-    }, this.async());
-  });
-
-  grunt.registerTask('server', function () {
-    if (server) {
-      server.kill();
-    }
-
-    server = grunt.util.spawn({
-      cmd: 'node',
-      args: ['bin/server'],
-      opts: {
-        cwd: __dirname,
-        stdio: 'inherit'
-      }
-    }, function () {});
-  });
-
-  grunt.registerTask('default', ['browserify', 'less']);
-  grunt.registerTask('dev', ['browserify:dependencies', 'watch']);
-  grunt.registerTask('logs', ['npm:run-script:logs']);
+  grunt.registerTask('default', ['browserify', 'less', 'index']);
+  grunt.registerTask('dev', ['browserify:dependencies', 'index', 'watch']);
 };
