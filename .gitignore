@@ -26,9 +26,3 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
-
-# Browserify output
-public/*.bundle.js
-
-# LESS output
-public/bundle.css
