@@ -76,9 +76,6 @@ module.exports = function (grunt) {
         options: {
           atBegin: true
         }
-      },
-      options: {
-        spawn: false
       }
     }
   });
@@ -92,8 +89,6 @@ module.exports = function (grunt) {
     var renderer = littlest.StaticRenderer.createRenderer({
       templatePath: path.resolve(__dirname, '_index.html')
     });
-
-    require.cache = {};
 
     fs.writeFileSync(
       path.resolve(__dirname, 'index.html'),
